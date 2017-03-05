@@ -1,16 +1,5 @@
-# TODO:
-#  DATA:
-#   1. get data from site
-#   2. analyse data that we have got
-#
-#  PROG:
-#   1. make 4 arrays with 3spaces for bool values (3d array??)
-#   2.
 import nltk;
-
-print("version 2");
-
-#text = 'This is a sentence that contains some words. These words are sometimes long, but mostly short. I like words, some may even say that I have the best words!';
+from random import randint;
 
 dt = [];
 vb = [];
@@ -22,14 +11,19 @@ conj = [];
 gmr = [];
 ignore = [];
 
-#result = [i for i in result if i[0].lower == 'words']
+wordlist = [];
+tobequitefrankthisisanarray = [];
 
-verbose = False;
+frankfilenotSQL = 'words/frank.csv';
+
+verbose = 0;
 
 def getWordTypes(text):
+	if not text:
+		wordlist.append("ERROR");
 	text = nltk.word_tokenize(text);
 	words = nltk.pos_tag(text);
-	if verbose == True:
+	if verbose == 0:
 		for item, index in words:
 			if index == 'DT' or index == 'PRP$':
 				dt.append(item);
@@ -69,8 +63,51 @@ def getWordTypes(text):
 		print "Grammar", gmr;
 		print("");
 		print "Ignore", ignore;
-		print("");
-	else:
+	elif verbose == 1:
 		print words;
-	
-getWordTypes("why hello my fellow human. i am not a robot, i am alive! a real boy, i do declare my variables");
+
+def updateWordList():
+	with open('words/wordlist.csv', 'r') as myfile:
+	    wordlist=myfile.read().split('\n');
+	return wordlist
+
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
+
+def getTextFile(filename):
+	print "start"
+	randomNo = randint(0, (file_len(filename)-1));
+	print randomNo
+	with open(filename, 'r') as frank:
+		print "start openfile"
+		frank.seek(randomNo);
+		print "seeking"
+		tobequitefrankthisisanarray = frank.readline();
+		print "read frank"
+		print "";
+		#print tobequitefrankthisisanarray;
+	return tobequitefrankthisisanarray;
+
+#TODO:
+#	1. get frank.txt
+#	2. get rndm pos in frank
+#	3. select a sentence that is 140 chars max with  a lower limit of 10
+
+wordlist = updateWordList();
+
+textwords = ' '.join(wordlist);
+
+getWordTypes(textwords);
+
+print("");
+print("");
+print("");
+print("");
+print("");
+
+outputTextFile = getTextFile(frankfilenotSQL);
+
+print outputTextFile;
