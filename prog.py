@@ -13,6 +13,7 @@ ignore = [];
 
 wordlist = [];
 textline = [];
+repl = [];
 
 frankfilenotSQL = 'words/frank.csv';
 
@@ -64,76 +65,31 @@ def getWordTypes(text):
 		print("");
 		print "Ignore", ignore;
 
-def getTypes(text, lookingfor1, lookingfor2, lookingfor3):
-	lf1b = 0
-	lf2b = 0
-	lf3b = 0
+def addNewNouns(text, n1, n2, n3):
+	nouns = [];
+	nouns = getTypes(text);
+	text = text.replace(nouns[0],n1);
+	text = text.replace(nouns[1],n2);
+	text = text.replace(nouns[2],n3);
+	return text;
 
+def getTypes(text):
+	lfb = 0
 	wordTypes = getWordTypes(text);
 
-	if (lookingfor1 == 'dt'):
-		lf1b = dt;
-	if (lookingfor1 == 'vb'):
-		lf1b = vb;
-	if (lookingfor1 == 'nn'):
-		lf1b = nn;
-	if (lookingfor1 == 'wdt'):
-		lf1b = wdt;
-	if (lookingfor1 == 'rb'):
-		lf1b = rb;
-	if (lookingfor1 == 'jj'):
-		lf1b = jj;
-	if (lookingfor1 == 'conj'):
-		lf1b = conj;
-	if (lookingfor1 == 'gmr'):
-		lf1b = gmr;
+	lfb = nn;
+	for value in lfb:
+		if (len(value) <= 3):
+			lfb.remove(value);
 
-	if (lookingfor2 == 'dt'):
-		lf2b = dt;
-	if (lookingfor2 == 'vb'):
-		lf2b = vb;
-	if (lookingfor2 == 'nn'):
-		lf2b = nn;
-	if (lookingfor2 == 'wdt'):
-		lf2b = wdt;
-	if (lookingfor2 == 'rb'):
-		lf2b = rb;
-	if (lookingfor2 == 'jj'):
-		lf2b = jj;
-	if (lookingfor2 == 'conj'):
-		lf2b = conj;
-	if (lookingfor2 == 'gmr'):
-		lf2b = gmr;
-
-	if (lookingfor3 == 'dt'):
-		lf3b = dt;
-	if (lookingfor3 == 'vb'):
-		lf3b = vb;
-	if (lookingfor3 == 'nn'):
-		lf3b = nn;
-	if (lookingfor3 == 'wdt'):
-		lf3b = wdt;
-	if (lookingfor3 == 'rb'):
-		lf3b = rb;
-	if (lookingfor3 == 'jj'):
-		lf3b = jj;
-	if (lookingfor3 == 'conj'):
-		lf3b = conj;
-	if (lookingfor3 == 'gmr'):
-		lf3b = gmr;
-
-	if (len(lf1b) == 0):
-		print "FAIL, LF1B is NULL"
-		return False
-	if (len(lf2b) == 0):
-		print "FAIL, LF2B is NULL"
-		return False
-	if len(lf3b) == 0:
-		print "FAIL, LF3B is NULL"
+	if (len(lfb) < 3):
 		return False;
 
-	output = [lf1b, lf2b, lf3b];
-	return output;
+	if len(lfb) == 0:
+		print "FAIL, LFB is NOT a NOUN"
+		return False;
+
+	return lfb[0:3];
 
 def updateWordList():
 	with open('words/nouns.csv', 'r') as myfile:
@@ -146,9 +102,9 @@ def file_len(fname):
             pass
     return i + 1
 
-def getTextFile(filename, no1, no2, no3):
+def getTextFile(filename):
 	print "start"
-	randomNo = randint(0, (file_len(filename)-1));
+	randomNo = randint(0, 433403);
 	print randomNo
 	repeat = True
 	with open(filename, 'r') as frank:
@@ -163,7 +119,7 @@ def getTextFile(filename, no1, no2, no3):
 			print "starting if to check leng"
 			if (len(textline) <= 10 or len(textline) >= 140):
 				print "setting types to getTypes vals"
-				types = getTypes(textline, no1, no2, no3)
+				types = getTypes(textline)
 				print "if types is false, restart while"
 				if (types != False):
 					print "success!"
@@ -187,17 +143,17 @@ textwords = ' '.join(wordlist);
 
 print("");
 
-outputTextFile = getTextFile(frankfilenotSQL, 'nn', 'nn', 'jj');
+outputTextFile = getTextFile(frankfilenotSQL);
 
 #print outputTextFile;
 
 print("");
 
-print getTypes(outputTextFile, 'nn', 'wdt', 'rb');
-# print getTypes(outputTextFile, 'vb');
-# print getTypes(outputTextFile, 'nn');
-# print getTypes(outputTextFile, 'wdt');
-# print getTypes(outputTextFile, 'rb');
-# print getTypes(outputTextFile, 'jj');
-# print getTypes(outputTextFile, 'conj');
-# print getTypes(outputTextFile, 'gmr');
+repl.append('table');
+repl.append('mug');
+repl.append('chair');
+
+print getTypes(outputTextFile);
+print "['" + repl[0] + "', '" + repl[1] + "', '" + repl[2] + "']";
+print addNewNouns(outputTextFile, repl[0], repl[1], repl[2]);
+#print addNewNouns(outputTextFile, 'table', 'mug', 'chair');
