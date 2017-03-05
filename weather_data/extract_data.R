@@ -1,16 +1,11 @@
 # Extract data from a netcdf file
 
-require(RNetCDF)
-
-#lat <- 51.449
-#lon <- -0.958
-
-#filename <- "temp.nc"
-#var <- "t2m"
+#library(RNetCDF)
+library(RNetCDF, lib.loc="~/Documents/R/win-library/3.3")
 
 #----------------------------
 
-GetPointDataNetCDF <- function(filename, lat, lon, var) {
+GetPointDataNetCDF <- function(filename, lat, lon, vars) {
 
   if(lon < 0) { lon <- lon+360 }
   
@@ -34,17 +29,42 @@ GetPointDataNetCDF <- function(filename, lat, lon, var) {
   lon_ind <- which.min(abs(lon-nc_lon)) # index closest to input lat
   
   out <- list()
-  
+
+  # Loop through the gridded data layers
   for (i in 3:length(x)) {
-    varname <- var.inq.nc(ncfile = data,var=(i-1))$name
-    print(paste("Looking at ",varname,sep=""))
-    print(var %in% varname)
-    if (var %in% varname) {
+    varname <- var.inq.nc(ncfile = data,variable=(i-1))$name
+
+    # If this variable is in our list
+    if (sum(vars %in% varname)>0) {
+      
+      # Find which variable we're looking at
+      which_vars <- which(vars %in% varname)
+      if(length(which_vars) > 1 ) { stop("ERROR!! Too many variable name matches") }
+      var_now <- vars[which_vars][[1]]
+      print(paste("Looking at ",varname,sep=""))
+      
+      # Subset the data at the location we care about
       var_data <- x[[i]]                       # nc data
       var_ts   <- var_data[lon_ind,lat_ind,]
-      out[[var]] <- var_ts
+      
+      # Store output
+      out[[var_now]] <- var_ts
     }
   }
   
+  if(length(out)==0) { print("WARNING - no data found") }
+
+  close.nc(data)
+  
+  out <- as.data.frame(out)
   return(out)
 }
+
+input <- read.csv("temp_input.txt",header=FALSE,sep=" ")
+source("set_up_weather_data_download.R")
+if(nchar(MONTH)<2) {  MONTH <- paste("0",MONTH,sep="") }
+if(nchar(DAY)<2)   {  DAY <-   paste("0",DAY,sep="") }
+file_input <- paste("./data/ERAInt_forecast_",YEAR,"-",MONTH,"-",DAY,".nc",sep="")
+
+output <- GetPointDataNetCDF(file_input,LAT,LON,VARS)
+write.csv(output,paste("./data/FC_temp_",YEAR,"-",MONTH,"-",DAY,".csv",sep=""),row.names=FALSE)
