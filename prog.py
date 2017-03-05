@@ -1,16 +1,4 @@
-# TODO:
-#  DATA:
-#   1. get data from site
-#   2. analyse data that we have got
-#
-#  PROG:
-#   1. make 4 arrays with 3spaces for bool values (3d array??)
-#   2.
 import nltk;
-
-print("version 2");
-
-#text = 'This is a sentence that contains some words. These words are sometimes long, but mostly short. I like words, some may even say that I have the best words!';
 
 dt = [];
 vb = [];
@@ -22,9 +10,7 @@ conj = [];
 gmr = [];
 ignore = [];
 
-#result = [i for i in result if i[0].lower == 'words']
-
-verbose = False;
+verbose = True;
 
 def getWordTypes(text):
 	text = nltk.word_tokenize(text);
@@ -72,5 +58,10 @@ def getWordTypes(text):
 		print("");
 	else:
 		print words;
-	
+
+#TODO:
+#	1. get frank.txt
+#	2. get rndm pos in frank
+#	3. select 140 chars max with  
+
 getWordTypes("why hello my fellow human. i am not a robot, i am alive! a real boy, i do declare my variables");
