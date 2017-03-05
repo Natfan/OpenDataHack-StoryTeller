@@ -67,4 +67,13 @@ if(nchar(DAY)<2)   {  DAY <-   paste("0",DAY,sep="") }
 file_input <- paste("./data/ERAInt_forecast_",YEAR,"-",MONTH,"-",DAY,".nc",sep="")
 
 output <- GetPointDataNetCDF(file_input,LAT,LON,VARS)
-write.csv(output,paste("./data/FC_temp_",YEAR,"-",MONTH,"-",DAY,".csv",sep=""),row.names=FALSE)
+output$year <- YEAR
+output$month <- MONTH
+output$day <- DAY
+output$lat <- lat
+output$lon <- lon
+output$hour <- c(3,6,9,12,15,18,21,00)
+
+out_filename <- paste("./data/FC_temp_",YEAR,"-",MONTH,"-",DAY,".csv",sep="")
+write.csv(output,out_filename,row.names=FALSE)
+system(paste("cp ",out_filename," ./data/FC_latest.csv"))

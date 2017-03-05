@@ -3,12 +3,12 @@
 # GET AND PROCESS WEATHER DATA
 # 
 
-YEAR  = 1987
-MONTH = 1
-DAY   = 2
+YEAR  = 2016
+MONTH = 10
+DAY   = 3
 
-LAT = 50
-LON = 51
+LAT = 18.5
+LON = -74.3
 
 VARS = c("t2m","u10","v10","tcc","tp","sf")
 
@@ -22,8 +22,6 @@ conversions = list(
   tp = "228.128",   # total precip
   sf = "144.128"    # snowfall
 )
-
-print("Setting up variables and file input")
 
 vars_in <- as.character(conversions[VARS])
 if(sum(is.na(vars_in))>0) { print("Error: some variables not recognised") }
@@ -47,4 +45,3 @@ write.csv(paste(c(YEAR,MONTH,DAY,vars_in),collapse=" "),
 
 #GetWeatherMapData
 
-print("Done")

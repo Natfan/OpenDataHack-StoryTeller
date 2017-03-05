@@ -2,7 +2,8 @@
 #
 
 x1 <- read.csv("frank.txt", sep="\n")
-x2 <- paste(paste(x1[[1]], sep=" "),collapse=" ")
+#x2 <- paste(paste(x1[[1]], sep=" "),collapse=" ")
+x2 <- paste(x1[[1]], collapse=" ")
 splitstrings <- c("\\.","!","?",":",";")
 splitstrings <- c(splitstrings, paste(splitstrings," ",sep=""))
 x3 <- strsplit(as.character(x2[[1]]), splitstrings)
