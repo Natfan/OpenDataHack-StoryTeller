@@ -10,12 +10,16 @@ conj = [];
 gmr = [];
 ignore = [];
 
-verbose = True;
+wordlist = [];
+
+verbose = 0;
 
 def getWordTypes(text):
+	if not text:
+		wordlist.append("ERROR");
 	text = nltk.word_tokenize(text);
 	words = nltk.pos_tag(text);
-	if verbose == True:
+	if verbose == 0:
 		for item, index in words:
 			if index == 'DT' or index == 'PRP$':
 				dt.append(item);
@@ -55,13 +59,21 @@ def getWordTypes(text):
 		print "Grammar", gmr;
 		print("");
 		print "Ignore", ignore;
-		print("");
-	else:
+	elif verbose == 1:
 		print words;
+
+def updateWordList():
+	with open('words/wordlist.csv', 'r') as myfile:
+	    wordlist=myfile.read().split('\n');
+	return wordlist
 
 #TODO:
 #	1. get frank.txt
 #	2. get rndm pos in frank
-#	3. select 140 chars max with  
+#	3. select 140 chars max with  a lower limit of 10
 
-getWordTypes("why hello my fellow human. i am not a robot, i am alive! a real boy, i do declare my variables");
+wordlist = updateWordList();
+
+textwords = ' '.join(wordlist);
+
+getWordTypes(textwords);
