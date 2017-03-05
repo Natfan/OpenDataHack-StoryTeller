@@ -1,4 +1,5 @@
 import nltk;
+from random import randint;
 
 dt = [];
 vb = [];
@@ -11,6 +12,9 @@ gmr = [];
 ignore = [];
 
 wordlist = [];
+tobequitefrankthisisanarray = [];
+
+frankfilenotSQL = 'words/frank.csv';
 
 verbose = 0;
 
@@ -67,13 +71,43 @@ def updateWordList():
 	    wordlist=myfile.read().split('\n');
 	return wordlist
 
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
+
+def getTextFile(filename):
+	print "start"
+	randomNo = randint(0, (file_len(filename)-1));
+	print randomNo
+	with open(filename, 'r') as frank:
+		print "start openfile"
+		frank.seek(randomNo);
+		print "seeking"
+		tobequitefrankthisisanarray = frank.readline();
+		print "read frank"
+		print "";
+		#print tobequitefrankthisisanarray;
+	return tobequitefrankthisisanarray;
+
 #TODO:
 #	1. get frank.txt
 #	2. get rndm pos in frank
-#	3. select 140 chars max with  a lower limit of 10
+#	3. select a sentence that is 140 chars max with  a lower limit of 10
 
 wordlist = updateWordList();
 
 textwords = ' '.join(wordlist);
 
 getWordTypes(textwords);
+
+print("");
+print("");
+print("");
+print("");
+print("");
+
+outputTextFile = getTextFile(frankfilenotSQL);
+
+print outputTextFile;
