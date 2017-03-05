@@ -4,8 +4,8 @@
 #
 #
 
-d_lat <- 0.01
-d_lon <- 0.01
+d_lat <- 0.05
+d_lon <- 0.05
 
 
 lon_range <- c(-10,2)
@@ -21,6 +21,10 @@ lat_coords <- seq(lat_range[[1]],lat_range[[2]],d_lat)
 lon_coords <- seq(lon_range[[1]],lon_range[[2]],d_lon)
 n_lats <- length(lat_coords)
 n_lons <- length(lon_coords)
+
+unique_num_to_3tuple <- function(n) {
+  
+}
 
 convert_3tuple <- function(input_file, n_words=7713) {
   
@@ -41,14 +45,35 @@ convert_3tuple <- function(input_file, n_words=7713) {
 
   vector <- as.data.frame(vector)
   
-  n_possibilities <- length(temp_band_names) *
+  n_forecasts <- as.double(length(temp_band_names) *
     length(cloud_band_names) *
     length(wind_band_names) *
-    length(all_precip_band_names)
-  print(paste("Num possible forecasts = ",n_possibilities^length(vector[2,1]),sep=""))
+    length(all_precip_band_names))
+  n_possibilities <- n_lats*n_lons*n_forecasts
+
+  print(paste("Num possible forecasts = ",n_forecasts,sep=""))
   print(paste("Num coordinate locations = ",(n_lats*n_lons),sep=""))
-  print(paste("Num forecast combinations = ",(n_lats*n_lons)*n_possibilities^length(vector[2,1]),sep=""))
+  print(paste("Num forecast combinations = ",n_possibilities,sep=""))
   print(paste("Num word combinations = ",n_words^3))
   
+  print("Encode forecast")
+  x_array <- 1:n_possibilities
+  print(n_lons*n_lats*length(temp_band_names)*
+        length(wind_band_names)*length(cloud_band_names)*
+        length(all_precip_band_names))
+  dim(x_array) <- c(n_lons,n_lats,length(temp_band_names),
+                           length(wind_band_names),length(cloud_band_names),
+                           length(all_precip_band_names))
+  print(head(x_array))
+  print(dim(x_array))
   
+  unique_num <- (x_array[ min(which(lon_coords-LON > 0)),
+                  min(which(lat_coords-LAT > 0)),
+                  vector$t2m[[2]],
+                  vector$tcc[[2]],
+                  vector$ws[[2]],
+                  vector$tp[[2]] ])
+  
+  print("tupling")
+  return(unique_num_to_3tuple(unique_num))
 }
